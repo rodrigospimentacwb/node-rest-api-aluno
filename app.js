@@ -1,11 +1,19 @@
+require('dotenv').config()
+console.log('Ambiente:', process.env.NODE_ENV)
+
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const rotaAlunos = require('./routes/alunos');
 
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true })) 
 app.use(express.json());
+
+const rotaAlunos = require('./routes/alunosRouter');
+app.use('/alunos', rotaAlunos);
+
+const rotaSeguranca = require('./routes/apiSegRouter');
+app.use('/seg', rotaSeguranca);
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -20,8 +28,6 @@ app.use((req, res, next) => {
         }
         next();
 })
-
-app.use('/alunos', rotaAlunos);
 
 app.use((req, res, next) => {
     const erro = new Error('Não encontrado');

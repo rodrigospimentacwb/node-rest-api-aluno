@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const knex = require('knex') (require('../knexfile').development)
+const apiSegRouter = require('./apiSegRouter')
 
-const listaAlunos = {
-    alunos: []
-};
+const knexEnv = process.env.NODE_ENV || 'development'
+const knexConfig = require('../knexfile')[knexEnv]
+const knex = require('knex')(knexConfig)
 
-router.get('/', (req, res, next) => {
+router.get('/', apiSegRouter.checkToken, (req, res, next) => {
     knex("alunos")
     .then(alunos => res.status(200).json(alunos))
 });
