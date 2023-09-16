@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "0979d965-cdbf-4dec-910d-2d0639775e60",
+		"_postman_id": "36211523-fd5e-4a53-af74-ce947382b767",
 		"name": "rest-api-alunos",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "17659128"
+		"_exporter_id": "237520"
 	},
 	"item": [
 		{
@@ -14,7 +14,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluIiwiaWF0IjoxNjk0ODE2ODM3LCJleHAiOjE2OTQ4MjA0Mzd9.N4JnfH1PIR5sUs1cVNIvkwqAkrjIYjlhp4b9h0adYxo",
+							"value": "{{token}}",
 							"type": "string"
 						}
 					]
@@ -22,19 +22,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/alunos?",
+					"raw": "localhost:3000/api/alunos",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
+						"api",
 						"alunos"
-					],
-					"query": [
-						{
-							"key": "",
-							"value": null
-						}
 					]
 				}
 			},
@@ -43,17 +38,28 @@
 		{
 			"name": "buscar aluno por id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/alunos/5",
+					"raw": "localhost:3000/api/alunos/2",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
+						"api",
 						"alunos",
-						"5"
+						"2"
 					]
 				}
 			},
@@ -62,11 +68,21 @@
 		{
 			"name": "adicionar aluno",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"nome\" : \"Miguel Oliveira de Souza\",\r\n    \"genero\": \"M\",\r\n    \"email\" : \"miguel.os@hotmail.com\"\r\n}",
+					"raw": "{\r\n    \"nome\" : \"Miguel Oliveisadra de Souza\",\r\n    \"genero\": \"M\",\r\n    \"email\" : \"miguel.os@hotmsadail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -74,12 +90,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/alunos",
+					"raw": "localhost:3000/api/alunos",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
+						"api",
 						"alunos"
 					]
 				}
@@ -89,11 +106,21 @@
 		{
 			"name": "alterar aluno",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"nome\" : \"Miguel Oliveira da Silva\",\r\n    \"genero\": \"M\",\r\n    \"email\" : \"miguel.os@gmail.com\"\r\n}",
+					"raw": "{\r\n    \"nome\": \"Aderbal Oliveisadra de Souza\",\r\n    \"genero\": \"M\",\r\n    \"email\": \"miguel.os@hotmsadail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -101,14 +128,15 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/alunos/5",
+					"raw": "localhost:3000/api/alunos/12",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
+						"api",
 						"alunos",
-						"5"
+						"12"
 					]
 				}
 			},
@@ -117,17 +145,28 @@
 		{
 			"name": "excluir aluno",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/alunos/5",
+					"raw": "localhost:3000/api/alunos/12",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
+						"api",
 						"alunos",
-						"5"
+						"12"
 					]
 				}
 			},
@@ -135,6 +174,18 @@
 		},
 		{
 			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();\r",
+							"pm.environment.set('token', res.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -148,18 +199,39 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/seg/login",
+					"raw": "localhost:3000/api/auth/login",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"seg",
+						"api",
+						"auth",
 						"login"
 					]
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }

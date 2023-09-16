@@ -12,7 +12,7 @@ app.use(express.json());
 const rotaAlunos = require('./routes/alunosRouter');
 app.use('/api', rotaAlunos);
 
-const rotaSeguranca = require('./routes/apiSegRouter');
+const rotaSeguranca = require('./routes/authRouter');
 app.use('/api', rotaSeguranca);
 
 app.use((req, res, next) => {

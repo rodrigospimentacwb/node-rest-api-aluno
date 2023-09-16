@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const apiSegRouter = require('./apiSegRouter')
+const authRouter = require('./authRouter')
+const securityFilters = require('../middleware/security-filters')
 
 const knexEnv = process.env.NODE_ENV || 'development'
 const knexConfig = require('../knexfile')[knexEnv]
@@ -11,14 +12,14 @@ function basePath(path) {
     return rootPath + path
 }
 
-router.get(basePath('/'), apiSegRouter.checkToken, apiSegRouter.checkRole("USER"), (req, res, next) => {
+router.get(basePath('/'), securityFilters.checkAuth(), (req, res, next) => {
     knex("alunos")
     .then(alunos => res.status(200).json(alunos))
 });
 
-router.get(basePath('/:id_aluno'), apiSegRouter.checkRole("ADMIN"), apiSegRouter.checkToken, (req, res, next) => {
+router.get(basePath('/:id'), securityFilters.checkAuth("USER"), (req, res, next) => {
     knex("alunos")
-    .where({id: req.params.id_aluno})
+    .where({id: req.params.id})
     .then(alunos => {
         if (alunos.length) {
             res.status(200).json(alunos[0])
@@ -28,7 +29,7 @@ router.get(basePath('/:id_aluno'), apiSegRouter.checkRole("ADMIN"), apiSegRouter
     })
 });
 
-router.post(basePath('/'), apiSegRouter.checkToken, apiSegRouter.checkRole("ADMIN"), (req, res, next) => {
+router.post(basePath('/'), securityFilters.checkAuth("ADMIN"), (req, res, next) => {
     const { nome, genero, email } = req.body;
 
     if (!nome || !genero || !email) {
@@ -47,7 +48,7 @@ router.post(basePath('/'), apiSegRouter.checkToken, apiSegRouter.checkRole("ADMI
         });
 });
 
-router.put(basePath('/:id_aluno'), apiSegRouter.checkToken, apiSegRouter.checkRole("ADMIN"), (req, res, next) => {
+router.put(basePath('/:id'), securityFilters.checkAuth("ADMIN"), (req, res, next) => {
     const { nome, genero, email } = req.body;
 
     if (!nome || !genero || !email) {
@@ -55,7 +56,7 @@ router.put(basePath('/:id_aluno'), apiSegRouter.checkToken, apiSegRouter.checkRo
     }
 
     knex('alunos')
-        .where({ id: req.params.id_aluno })
+        .where({ id: req.params.id })
         .update({ nome, genero, email })
         .returning('*')
         .then(aluno => {
@@ -71,9 +72,9 @@ router.put(basePath('/:id_aluno'), apiSegRouter.checkToken, apiSegRouter.checkRo
         });
 });
 
-router.delete(basePath('/:id_aluno'), apiSegRouter.checkToken, apiSegRouter.checkRole("ADMIN"), (req, res, next) => {
+router.delete(basePath('/:id'), securityFilters.checkAuth("ADMIN"), (req, res, next) => {
     knex('alunos')
-        .where({ id: req.params.id_aluno })
+        .where({ id: req.params.id })
         .del()
         .then(deletedCount => {
             if (deletedCount > 0) {

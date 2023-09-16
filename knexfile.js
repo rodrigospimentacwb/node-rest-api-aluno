@@ -1,10 +1,5 @@
-// Update with your config settings.
-require('dotenv').config()
-/**
- * @type { Object.<string, import("knex").Knex.Config> }
- */
-console.log( process.env.DATABASE_URL, process.env.NODE_ENV)
 
+require('dotenv').config()
 module.exports = {
 
   development: {
@@ -12,18 +7,30 @@ module.exports = {
     connection: {
       filename: './dev.sqlite3'
     },
-    useNullAsDefault: true
+    useNullAsDefault: true,
+
+    seeds: {
+      directory: './database/seeds',
+    },
+    migrations: {
+      directory: './database/migrations',
+      tableName: 'knex_migrations'
+    }
   },
 
   production: {
     client: 'postgresql',
     connection: process.env.DATABASE_URL,
+    useNullAsDefault: true,
     pool: {
       min: 2,
       max: 10
     },
-    useNullAsDefault: true,
+    seeds: {
+      directory: './database/seeds',
+    },
     migrations: {
+      directory: './database/migrations',
       tableName: 'knex_migrations'
     }
   }
