@@ -1,9 +1,9 @@
 // Update with your config settings.
-
+require('dotenv').config()
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
-
+console.log( process.env.DATABASE_URL, process.env.NODE_ENV)
 
 module.exports = {
 

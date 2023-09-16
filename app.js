@@ -6,14 +6,14 @@ const app = express();
 const morgan = require('morgan');
 
 app.use(morgan('dev'));
-app.use(express.urlencoded({ extended: true })) 
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 
 const rotaAlunos = require('./routes/alunosRouter');
-app.use('/alunos', rotaAlunos);
+app.use('/api', rotaAlunos);
 
 const rotaSeguranca = require('./routes/apiSegRouter');
-app.use('/seg', rotaSeguranca);
+app.use('/api', rotaSeguranca);
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');

@@ -6,12 +6,17 @@ const knexEnv = process.env.NODE_ENV || 'development'
 const knexConfig = require('../knexfile')[knexEnv]
 const knex = require('knex')(knexConfig)
 
-router.get('/', apiSegRouter.checkToken, (req, res, next) => {
+const rootPath = "/alunos"
+function basePath(path) {
+    return rootPath + path
+}
+
+router.get(basePath('/'), apiSegRouter.checkToken, apiSegRouter.checkRole("USER"), (req, res, next) => {
     knex("alunos")
     .then(alunos => res.status(200).json(alunos))
 });
 
-router.get('/:id_aluno', (req, res, next) => {
+router.get(basePath('/:id_aluno'), apiSegRouter.checkRole("ADMIN"), apiSegRouter.checkToken, (req, res, next) => {
     knex("alunos")
     .where({id: req.params.id_aluno})
     .then(alunos => {
@@ -23,7 +28,7 @@ router.get('/:id_aluno', (req, res, next) => {
     })
 });
 
-router.post('/', (req, res, next) => {
+router.post(basePath('/'), apiSegRouter.checkToken, apiSegRouter.checkRole("ADMIN"), (req, res, next) => {
     const { nome, genero, email } = req.body;
 
     if (!nome || !genero || !email) {
@@ -42,7 +47,7 @@ router.post('/', (req, res, next) => {
         });
 });
 
-router.put('/:id_aluno', (req, res, next) => {
+router.put(basePath('/:id_aluno'), apiSegRouter.checkToken, apiSegRouter.checkRole("ADMIN"), (req, res, next) => {
     const { nome, genero, email } = req.body;
 
     if (!nome || !genero || !email) {
@@ -66,7 +71,7 @@ router.put('/:id_aluno', (req, res, next) => {
         });
 });
 
-router.delete('/:id_aluno', (req, res, next) => {
+router.delete(basePath('/:id_aluno'), apiSegRouter.checkToken, apiSegRouter.checkRole("ADMIN"), (req, res, next) => {
     knex('alunos')
         .where({ id: req.params.id_aluno })
         .del()
